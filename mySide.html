@@ -28,54 +28,39 @@
         camera.updateProjectionMatrix();
     })
 
-    var raycaster = new THREE.Raycaster();
-    var mouse = new THREE.Vector2();
+    var geometry = new THREE.SphereGeometry(0.5, 5, 5);
+    var material = new THREE.MeshLambertMaterial({color: 0x000000});
 
-    var geometry = new THREE.SphereGeometry(1, 100, 100);
-    var material = new THREE.MeshLambertMaterial({color: 0xF7F7F7});
-    //var mesh = new THREE.Mesh(geometry, material);
+    var timeLine = new TimelineMax();
 
-    //scene.add(mesh);
 
-    meshX = -10;
-    for (var i = 0; i < 150; i++) {
+    for (var i = 0; i < 10; i++) {
         var mesh = new THREE.Mesh(geometry, material);
         mesh.position.x = (Math.random() - 0.5) * 10;
         mesh.position.y = (Math.random() - 0.5) * 10;
         mesh.position.z = (Math.random() - 0.5) * 10;
         scene.add(mesh);
-        meshX += 1;
     }
 
-    var light = new THREE.PointLight(0xff9999, 2, 1000)
+    var light = new THREE.PointLight(0xfffff, 2, 1000)
     light.position.set(0, 10, 15);
     scene.add(light);
 
     var render = function () {
         requestAnimationFrame(render)
         renderer.render(scene, camera);
+        animation()
     }
 
-    function onMouseMove(event) {
-        event.preventDefault();
-
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-        raycaster.setFromCamera(mouse, camera);
-
+    function animation() {
         var intersects = raycaster.intersectObjects(scene.children, true);
+        var timeLine = TimelineMax();
         for (var i = 0; i < intersects.length; i++) {
-            this.tl = new TimelineMax();
-            this.tl.to(intersects[i].object.scale, 1, {x: 2, ease: Expo.easeOut})
-            this.tl.to(intersects[i].object.scale, .5, {x: .5, ease: Expo.easeOut})
-            this.tl.to(intersects[i].object.position, .5, {x: 2, ease: Expo.easeOut})
-            this.tl.to(intersects[i].object.rotation, .5, {y: Math.PI * .5, ease: Expo.easeOut}, "=-1.5")
+            timeLine.to(intersects[i].object.position, .5, {x: 2, ease: Expo.easeOut})
+            timeLine.to(intersects[i].object.rotation, .5, {y: Math.PI * .5, ease: Expo.easeOut}, "=-1.5")
         }
     }
 
-
-    window.addEventListener('mousemove', onMouseMove);
     render();
 </script>
 </body>
