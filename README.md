@@ -1,2 +1,2 @@
 # third_wisteria
-html, javascript, css, three.js, GreenSock
+html, javascript, css, three.js, GreenSock, GSAP

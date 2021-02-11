@@ -8,60 +8,9 @@
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
-<script>
-    var scene = new THREE.Scene();
+<script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
+<script src="js/set-up.js"></script>
+<script src="js/swarm_animation.js"></script>
 
-    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-    camera.position.z = 5;
-
-    var renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setClearColor("#e5e5e5");
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    document.body.appendChild(renderer.domElement);
-
-    window.addEventListener('resize', () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
-
-        camera.updateProjectionMatrix();
-    })
-
-    var geometry = new THREE.SphereGeometry(0.5, 5, 5);
-    var material = new THREE.MeshLambertMaterial({color: 0x000000});
-
-    var timeLine = new TimelineMax();
-
-
-    for (var i = 0; i < 10; i++) {
-        var mesh = new THREE.Mesh(geometry, material);
-        mesh.position.x = (Math.random() - 0.5) * 10;
-        mesh.position.y = (Math.random() - 0.5) * 10;
-        mesh.position.z = (Math.random() - 0.5) * 10;
-        scene.add(mesh);
-    }
-
-    var light = new THREE.PointLight(0xfffff, 2, 1000)
-    light.position.set(0, 10, 15);
-    scene.add(light);
-
-    var render = function () {
-        requestAnimationFrame(render)
-        renderer.render(scene, camera);
-        animation()
-    }
-
-    function animation() {
-        var intersects = raycaster.intersectObjects(scene.children, true);
-        var timeLine = TimelineMax();
-        for (var i = 0; i < intersects.length; i++) {
-            timeLine.to(intersects[i].object.position, .5, {x: 2, ease: Expo.easeOut})
-            timeLine.to(intersects[i].object.rotation, .5, {y: Math.PI * .5, ease: Expo.easeOut}, "=-1.5")
-        }
-    }
-
-    render();
-</script>
 </body>
 </html>
