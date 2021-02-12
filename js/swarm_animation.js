@@ -1,141 +1,97 @@
 var light = new THREE.PointLight(0x111111, 2, 1000)
-light.position.set(0, 10, 15);
+light.position.set(50, 60, 15);
 scene.add(light);
-
-class Particle {
-    constructor(x_0) {
-        this.position_i = [];
-        this.velocity_i = [];
-        this.pos_best_i = [];
-        this.fit_best_i = -1;
-        this.fit_i = -1;
-
-        for (let i = 0; i < 2; i++) {
-            let random_float = Math.random() * 2 - 1;
-            this.velocity_i.push(random_float);
-            this.position_i.push(x_0[i]);
-        }
-    }
-
-    evaluate(costFunction) {
-        this.fit_i = costFunction(this.position_i);
-
-        if (this.fit_i < this.fit_best_i || this.fit_best_i === -1) {
-            this.pos_best_i = this.position_i;
-            this.fit_best_i = this.fit_i;
-        }
-    }
-
-    update_velocity(pos_best_g) {
-        let w = 0.5;
-        let c1 = 1;
-        let c2 = 2;
-
-        for (let i = 0; i < 2; i++) {
-            let r1 = Math.random();
-            let r2 = Math.random();
-
-            let vel_cognitive = c1 * r1 * (this.pos_best_i[i] - this.position_i[i]);
-            let vel_social = c2 * r2 * (pos_best_g[i] - this.position_i[i]);
-            this.velocity_i[i] = w * this.velocity_i[i] + vel_cognitive + vel_social;
-        }
-    }
-
-    update_position(bounds) {
-        for (let i = 0; i < 2; i++) {
-            this.position_i[i] = this.position_i[i] + this.velocity_i[i];
-
-            if (this.position_i[i] > bounds[i][1]) {
-                this.position_i[i] = bounds[i][1];
-            }
-
-            if (this.position_i[i] < bounds[i][0]) {
-                this.position_i[i] = bounds[i][0];
-            }
-        }
-    }
-}
-
-class PSO {
-    constructor(costFunction, x_0, bounds, num_particles) {
-        this.costFunction = costFunction;
-        this.x_0 = x_0;
-        this.bounds = bounds;
-        this.num_particles = num_particles;
-        this.fit_best_g = -1;
-        this.pos_best_g = [];
-        this.particles = [];
-
-        for (let i = 0; i < num_particles; i++) {
-
-            this.particles.push(new Particle(x_0))
-        }
-    }
-
-    one_run() {
-        for (let j = 0; j < this.num_particles; j++) {
-            this.particles[j].evaluate(this.costFunction);
-
-            if (this.particles[j].fit_i < this.fit_best_g || this.fit_best_g === -1) {
-                this.pos_best_g = this.particles[j].position_i;
-                this.fit_best_g = this.particles[j].fit_i;
-            }
-        }
-        for (let j = 0; j < this.num_particles; j++) {
-            this.particles[j].update_velocity(this.pos_best_g);
-            this.particles[j].update_position(this.bounds);
-        }
-
-        // for (let j = 0; j < this.num_particles; j++) {
-        //     console.log(this.pos_best_g[j]);
-        // }
-    }
-}
 
 function ackley(x) {
     return -200 * Math.exp(-0.02 * Math.sqrt(x[0] ** 2 + x[1] ** 2));
 }
 
-function egg_crate(x) {
-    return x[0] ** 2 + x[1] ** 2 + 25 * (Math.sin(x[0]) ** 2 + Math.sin(x[1]) ** 2);
+function egg_crate(x, z) {
+    return x ** 2 + z ** 2 + 25 * (Math.sin(x) ** 2 + Math.sin(z) ** 2);
 }
 
-var geometry = new THREE.SphereGeometry(0.4, 5, 5);
+var geometry = new THREE.SphereGeometry(0.1, 10, 10);
 var material = new THREE.MeshLambertMaterial({color: 0xddaaff});
 
-var checker = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshLambertMaterial({color: 0x112233}));
-checker.position.x = 1;
-checker.position.y = 1.5;
-checker.position.z = -40;
-scene.add(checker);
-
-let swarm = [];
-
-for (let i = 0; i < 100; i++) {
-    let mesh = new THREE.Mesh(geometry, material);
-    mesh.position.x = (Math.random() - 0.5) * 100;
-    mesh.position.y = (Math.random() - 0.5) * 100;
-    mesh.position.z = -50;
-    swarm.push(mesh)
-    scene.add(mesh);
+class Particle {
+    constructor(x, y, z, color) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.color = color;
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.position.x = this.x;
+        this.mesh.position.y = this.y;
+        this.mesh.position.z = this.z;
+        scene.add(this.mesh);
+        this.red = 255.0;
+        this.green = 5.0;
+        this.blue = 5.0;
+    }
 }
+
+class Carpet {
+    constructor(bounds_for_x, bounds_for_z, particles_number, starting_color) {
+        this.particles = [];
+        this.particles_number = particles_number;
+
+        let x_distance = (bounds_for_x[1] - bounds_for_x[0]) / particles_number;
+        let z_distance = (bounds_for_z[1] - bounds_for_z[0]) / particles_number;
+        let x_start = bounds_for_x[0];
+        let z_start = bounds_for_z[0];
+
+        for (let i = 0; i < particles_number; i++) {
+            for (let j = 0; j < particles_number; j++) {
+                this.particles.push(new Particle(x_start, 90, z_start, starting_color));
+
+                z_start += z_distance;
+            }
+            x_start += x_distance;
+            z_start = bounds_for_z[0];
+
+        }
+        this.central_particle = this.particles[particles_number ** 2 / 2];
+    }
+}
+
+let carpet = new Carpet([-5, 5], [-5, 5], 50, 0x332211);
 
 createjs.Ticker.timingMode = createjs.Ticker.RAF;
 createjs.Ticker.addEventListener("tick", animate);
 
-let pso = new PSO(egg_crate, [-2, 3], [-5, 5], 100);
-let ticker = 0;
+var camera_pivot = new THREE.Object3D()
+var Y_AXIS = new THREE.Vector3(0, 1, 0);
+
+scene.add(camera_pivot);
+camera_pivot.add(camera);
+camera.target.position.copy( carpet.central_particle.mesh.position );
+// const controls = new OrbitControls( camera, renderer.domElement );
 
 function animate() {
-    ticker += 1;
     renderer.render(scene, camera);
-    pso.one_run();
-    for (let i = 0; i < 100; i++) {
-        createjs.Tween.get(swarm[i].position).to({
-            x: pso.particles[i].position_i[0],
-            z: pso.particles[i].position_i[1],
-            y: egg_crate(pso.particles[i].position_i)
-        }, 5000);
+    camera_pivot.rotateOnAxis(Y_AXIS, 0.005);
+    camera.position.y -= 0.035;
+    // camera.rotation.x -= 0.005;
+
+    for (let particle of carpet.particles) {
+        let move_down = 0;
+        if (egg_crate(particle.mesh.position.x, particle.mesh.position.z) > particle.mesh.position.y) {
+            move_down = 0;
+        } else {
+            move_down = 0.5;
+            particle.red -= 0.005;
+            particle.green += 0.005;
+            particle.blue += 0.005;
+        }
+
+        createjs.Tween.get(particle.mesh.position).to({
+            y: particle.mesh.position.y - move_down,
+        }, 500)
+        createjs.Tween.get(particle.mesh.material.color).to({
+            r: parseInt(particle.red),
+            g: parseInt(particle.green),
+            b: parseInt(particle.blue)
+        }, 500)
+
     }
-    console.log(ticker)
 }
