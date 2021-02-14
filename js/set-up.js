@@ -1,11 +1,14 @@
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+let scene = new THREE.Scene();
+scene.fog = new THREE.Fog
+scene.background = new THREE.Color(0x2e2e2e);
+
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 camera.position.z = 15;
 camera.position.y = 85
 
-var renderer = new THREE.WebGLRenderer({antialias: true});
+let renderer = new THREE.WebGLRenderer({antialias: true});
 
-renderer.setClearColor("#e5e5e5");
+renderer.setClearColor("#2e2e2e");
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -15,5 +18,3 @@ window.addEventListener('resize', () => {
 
     camera.updateProjectionMatrix();
 })
-
-// THREE.Object3D.DefaultUp.set(0, 0, 1);

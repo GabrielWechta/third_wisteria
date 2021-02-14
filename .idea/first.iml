@@ -11,5 +11,6 @@
     <orderEntry type="library" name="three.js" level="application" />
     <orderEntry type="library" name="gsap" level="application" />
     <orderEntry type="library" name="tweenjs" level="application" />
+    <orderEntry type="library" name="mathjax" level="application" />
   </component>
 </module>

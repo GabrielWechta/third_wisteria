@@ -1,17 +1,13 @@
-var light = new THREE.PointLight(0x111111, 2, 1000)
+var light = new THREE.PointLight(0x11918d8d1111, 2, 1000)
 light.position.set(50, 60, 15);
 scene.add(light);
-
-function ackley(x) {
-    return -200 * Math.exp(-0.02 * Math.sqrt(x[0] ** 2 + x[1] ** 2));
-}
 
 function egg_crate(x, z) {
     return x ** 2 + z ** 2 + 25 * (Math.sin(x) ** 2 + Math.sin(z) ** 2);
 }
 
 var geometry = new THREE.SphereGeometry(0.1, 10, 10);
-var material = new THREE.MeshLambertMaterial({color: 0xddaaff});
+var material = new THREE.MeshLambertMaterial({color: (0x2e2e2e)});
 
 class Particle {
     constructor(x, y, z, color) {
@@ -33,7 +29,6 @@ class Particle {
 class Carpet {
     constructor(bounds_for_x, bounds_for_z, particles_number, starting_color) {
         this.particles = [];
-        this.particles_number = particles_number;
 
         let x_distance = (bounds_for_x[1] - bounds_for_x[0]) / particles_number;
         let z_distance = (bounds_for_z[1] - bounds_for_z[0]) / particles_number;
@@ -64,14 +59,11 @@ var Y_AXIS = new THREE.Vector3(0, 1, 0);
 
 scene.add(camera_pivot);
 camera_pivot.add(camera);
-camera.target.position.copy( carpet.central_particle.mesh.position );
-// const controls = new OrbitControls( camera, renderer.domElement );
 
 function animate() {
     renderer.render(scene, camera);
     camera_pivot.rotateOnAxis(Y_AXIS, 0.005);
     camera.position.y -= 0.035;
-    // camera.rotation.x -= 0.005;
 
     for (let particle of carpet.particles) {
         let move_down = 0;
@@ -92,6 +84,5 @@ function animate() {
             g: parseInt(particle.green),
             b: parseInt(particle.blue)
         }, 500)
-
     }
 }
