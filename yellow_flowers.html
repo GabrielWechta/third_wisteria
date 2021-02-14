@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yellow Flowers</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<script src="./pixi/pixi-v5.min.js"></script>
+<script>
+    let app = new PIXI.Application({width: window.innerWidth, height: window.innerHeight});
+    document.body.appendChild(app.view);
+    let img = new PIXI.Sprite.from("./resources/yellow_flowers.jpg");
+    img.width = window.innerWidth;
+    img.height = window.innerHeight;
+    app.stage.addChild(img);
+
+    depthMap = new PIXI.Sprite.from("./resources/yellow_flowers_map.jpg");
+    depthMap.width = window.innerWidth;
+    depthMap.height = window.innerHeight;
+    app.stage.addChild(depthMap);
+
+    displacementFilter = new PIXI.filters.DisplacementFilter(depthMap);
+    app.stage.filters = [displacementFilter];
+
+    window.onmousemove = function (e) {
+        displacementFilter.scale.x = (window.innerWidth / 2 - e.clientX) / 40;
+        displacementFilter.scale.y = (window.innerHeight / 2 - e.clientY) / 40;
+    };
+
+    window.addEventListener('resize', () => {
+        img.width = window.innerWidth;
+        img.height = window.innerHeight;
+        depthMap.width = window.innerWidth;
+        depthMap.height = window.innerHeight;
+        app.renderer.resize(window.innerWidth, window.innerHeight);
+    })
+
+</script>
+
+</body>
+</html>
