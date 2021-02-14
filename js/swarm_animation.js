@@ -63,7 +63,7 @@ camera_pivot.add(camera);
 function animate() {
     renderer.render(scene, camera);
     camera_pivot.rotateOnAxis(Y_AXIS, 0.005);
-    camera.position.y -= 0.025;
+    camera.position.y -= 0.0;
 
     for (let particle of carpet.particles) {
         let move_down = 0;
