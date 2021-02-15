@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>Storm Over Moscow</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Dancing+Script">
+    <style>
+        p {
+            font-family: 'Dancing Script', serif;
+            font-size: 40px;
+        }
+    </style>
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
@@ -78,6 +86,26 @@
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     }
+</script>
+<p id="quote"></p>
+
+<script>
+    let quotes = [
+        "At the hour of the hot spring sunset two citizens appeared at the Patriarch’s Ponds.",
+        "‘Excuse me, please,’ the approaching man began speaking, with a foreign accent but without distorting the words, ‘if, not being your acquaintance, I allow myself... but the subject of your learned conversation is so interesting that ...’ </br>" +
+        "Here he politely took off his beret, and the friends had nothing left but to stand up and make their bows.</br>" +
+        "‘No, rather a Frenchman ...’ thought Berlioz.</br>" +
+        "‘A Pole? ...’ thought Homeless.</br>" +
+        "It must be added that from his first words the foreigner made a repellent impression on the poet, but Berlioz rather liked him — that is, not liked but ... how to put it ... was interested, or whatever.",
+        "I had the pleasure of meeting that young man at the Patriarch's Ponds. He almost drove me mad myself, proving to me that I don't exist. But you do believe that it is really I?",
+        "For some reason, cats are usually addressed familiarly, though no cat has ever drunk bruderschaft with anyone.",
+        "Cowardice was undoubtedly one of the most terrible vices - thus spoke Yeshua Ha-Nozri. </br> 'No, philosopher, I disagree with you: it is the most terrible vice!'",
+        "Everything will turn out right, the world is built on that.",
+        "Manuscripts don't burn.",
+        "There is no greater misfortune in the world than the loss of reason.",
+        "'You're not Dostoevsky,' said the citizeness, who was getting muddled by Koroviev. <br/> 'Well, who knows, who knows,' he replied. <br/> 'Dostoevsky's dead,' said the citizeness, but somehow not very confidently. <br/>'I protest!' Behemoth exclaimed hotly. 'Dostoevsky is immortal!'",
+        "Punch a man on the nose, kick an old man downstairs, shoot somebody or any old thing like that, that’s my job. But argue with women in love—no thank you!"]
+    document.getElementById("quote").innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
 </script>
 </body>
 </html>
