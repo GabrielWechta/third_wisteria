@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Storm Over Moscow</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/storm_over_moscow.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Dancing+Script">
     <style>
@@ -86,6 +86,13 @@
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     }
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+
+        camera.updateProjectionMatrix();
+    })
 </script>
 <p id="quote"></p>
 

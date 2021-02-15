@@ -9,10 +9,10 @@ canvas {
 
 p {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #5A5A5A;
+    color: #2e2e2e;
     width: auto;
     padding: .2em;
 }
